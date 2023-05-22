@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ODT Patients</string>
+    <string name="no_patients">There are no patients listed</string>
+    <string name="add">Add new patient</string>
+    <string name="select">View Patient</string>
+    <string name="remove">Remove patient</string>
+</resources>
