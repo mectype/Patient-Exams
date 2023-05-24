@@ -1,6 +1,7 @@
-package com.example.odtpatients.data
+package com.example.odtpatients.patient.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -15,7 +16,7 @@ interface PatientDao {
     fun findByName(fullName: String) : Patient
 
     @Insert
-    fun addUser(patient: Patient)
+    suspend fun addPatient(patient: Patient)
 
     @Delete
     fun removePatient(patient: Patient)

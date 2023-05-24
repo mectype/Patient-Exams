@@ -23,6 +23,7 @@
         android:layout_height="match_parent"
         app:layout_constraintTop_toBottomOf="@id/llButtons"/>
 
+
     <LinearLayout
         android:id="@+id/llButtons"
         android:layout_width="match_parent"
@@ -31,21 +32,22 @@
         android:weightSum="3"
         android:gravity="center">
     <Button
-        android:id="@+id/bAddPatient"
+        android:id="@+id/add_patient"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/add"
         />
+
         <Button
-            android:id="@+id/bViewPatient"
+            android:id="@+id/view_patient"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/select"
             />
         <Button
-            android:id="@+id/bRemovePatient"
+            android:id="@+id/remove_patient"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

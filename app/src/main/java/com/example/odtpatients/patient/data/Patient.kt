@@ -1,6 +1,6 @@
-package com.example.odtpatients.data
+package com.example.odtpatients.patient.data
 
-import android.net.Uri
+
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,7 +11,7 @@ data class Patient(
     val name: String,
 
     @ColumnInfo
-    val avatar: String,
+    val avatar: String?,
 
     @ColumnInfo
     var clinicalNotes: String?,
@@ -19,4 +19,4 @@ data class Patient(
     @ColumnInfo
     var images: List<String>?
 
-)
+) { constructor(name: String):this(name, null, null , null)}

@@ -13,6 +13,11 @@
         android:theme="@style/Theme.ODTPatients"
         tools:targetApi="31">
         <activity
+            android:name=".EditExamActivity"
+            android:exported="false"
+            android:label="@string/title_activity_edit_exam"
+            android:theme="@style/Theme.ODTPatients.NoActionBar" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">

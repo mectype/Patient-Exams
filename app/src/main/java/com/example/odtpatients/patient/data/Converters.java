@@ -1,4 +1,4 @@
-package com.example.odtpatients.data;
+package com.example.odtpatients.patient.data;
 
 import androidx.room.TypeConverter;
 
