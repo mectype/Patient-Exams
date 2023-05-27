@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:layoutDirection="ltr">
 
     <TextView
         android:id="@+id/tvEmptyList"
@@ -20,11 +21,18 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/patients_list"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/add_patient"
+        app:layout_constraintTop_toBottomOf="@+id/llButtons"
+        tools:layout_editor_absoluteX="10dp" />
+    <Button
+        android:id="@+id/add_patient"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintTop_toBottomOf="@id/llButtons"/>
-
+        android:text="@string/add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <LinearLayout
         android:id="@+id/llButtons"
@@ -32,14 +40,15 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         android:weightSum="3"
-        android:gravity="center">
+        android:gravity="center"
+        >
     <Button
-        android:id="@+id/add_patient"
+        android:id="@+id/export_patient"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/add"
-        />
+        android:text="@string/export"
+        style="?android:attr/buttonBarButtonStyle" />
 
         <Button
             android:id="@+id/view_patient"
@@ -47,14 +56,14 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/select"
-            />
+            style="?android:attr/buttonBarButtonStyle" />
         <Button
             android:id="@+id/remove_patient"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="@string/remove"
-            />
+            style="?android:attr/buttonBarButtonStyle" />
 
     </LinearLayout>
 

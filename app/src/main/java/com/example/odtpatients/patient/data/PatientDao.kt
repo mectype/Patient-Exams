@@ -19,5 +19,5 @@ interface PatientDao {
     suspend fun addPatient(patient: Patient)
 
     @Delete
-    fun removePatient(patient: Patient)
+    suspend fun removePatient(patient: Patient)
 }

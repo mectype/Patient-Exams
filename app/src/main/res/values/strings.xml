@@ -103,4 +103,6 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="patient_name_exists">Patient with this name already exists</string>
+    <string name="no_patient_selected">Please select a patient</string>
+    <string name="export">Export patient</string>
 </resources>

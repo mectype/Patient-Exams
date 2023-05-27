@@ -11,4 +11,8 @@ class PatientsRepository(patientsDatabase: PatientDatabase) {
     suspend fun addPatient(patient: Patient) {
             patientDao.addPatient(patient)
     }
+
+    suspend fun removePatient(patient: Patient) {
+        patientDao.removePatient(patient)
+    }
 }

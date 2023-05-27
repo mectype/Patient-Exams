@@ -30,4 +30,9 @@ class PatientsViewModel(application: Application) : AndroidViewModel(application
         }
         //patientsLiveData.value.add(patient)
     }
+    fun removePatient(patient: Patient) {
+        viewModelScope.launch {
+            patientsRepository.removePatient(patient)
+        }
+    }
 }
