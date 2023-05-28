@@ -1,5 +1,6 @@
-package com.example.odtpatients;
+package com.example.odtpatients.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,17 +14,25 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.odtpatients.R;
+import com.example.odtpatients.adapters.PatientsAdapter;
 import com.example.odtpatients.databinding.MainLayoutBinding;
 import com.example.odtpatients.interfaces.PatientRowClicked;
 import com.example.odtpatients.patient.data.Patient;
 import com.example.odtpatients.patient.view_model.PatientsViewModel;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LifecycleOwner, PatientRowClicked {
+    final static String PATIENT_NAME = "patient_name";
 
-    File imagesDir;
+    File avatarsImagesDir;
     final static String IMAGES_FOLDER = "images";
     private MainLayoutBinding mainLayoutBinding;
     private PatientsViewModel patientsViewModel;
@@ -37,9 +46,9 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
         mainLayoutBinding = MainLayoutBinding.inflate(getLayoutInflater());
         setContentView(mainLayoutBinding.getRoot());
 
-        imagesDir = new File(getCacheDir(), IMAGES_FOLDER);
-        if (!imagesDir.exists()) {
-            if (!imagesDir.mkdir()) {
+        avatarsImagesDir = new File(getCacheDir(), IMAGES_FOLDER);
+        if (!avatarsImagesDir.exists()) {
+            if (!avatarsImagesDir.mkdir()) {
                 Log.e("MainActivity", "Failed to create folder for images");
                 System.exit(1);
             }
@@ -63,22 +72,64 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
     }
     private void exportPatient() {
         if (assertPatientSelected()) {
+            showDialogForExport();
+        }
+    }
 
+    private void showDialogForExport() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(R.string.confirm_export);
+        alert.setPositiveButton(R.string.ok, (dialog, whichButton) -> {
+            exportPatientRecord();
+            rowIndex = -1;
+        });
+
+        alert.setNegativeButton(R.string.cancel, (dialog, whichButton) -> {  });
+        alert.show();
+    }
+
+    private void exportPatientRecord() {
+        File f = new File(getFilesDir(), currentPatient.getName().replaceAll(" ","_"));
+        if(f.mkdir()) {
+            Type type = new TypeToken<List<Patient>>(){}.getType();
+            String stdJson = new Gson().toJson(currentPatient, type);
+
+            try (FileWriter writer = new FileWriter(new File(f, "data.json"))) {
+                writer.write(stdJson);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            Toast.makeText(this, "Could not make folder "+f.getName(),Toast.LENGTH_LONG)
+                    .show();
         }
     }
 
     private void viewPatient() {
         if (assertPatientSelected()) {
-
+            Intent intent = new Intent(MainActivity.this, EditExamActivity.class);
+            intent.putExtra(PATIENT_NAME, currentPatient.getName());
+            startActivity(intent);
         }
     }
 
     private void removePatient() {
         if (assertPatientSelected()) {
+            showDialogForRemove();
+        }
+    }
+
+    private void showDialogForRemove() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(R.string.confirm_delete);
+        alert.setPositiveButton(R.string.ok, (dialog, whichButton) -> {
             patientsViewModel.removePatient(currentPatient);
             patientsAdapter.removePatient(currentPatient);
             rowIndex = -1;
-        }
+        });
+
+        alert.setNegativeButton(R.string.cancel, (dialog, whichButton) -> {  });
+        alert.show();
     }
 
     private void addNewPatient() {
@@ -119,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
             mainLayoutBinding.patientsList.setVisibility(View.VISIBLE);
         }
         if(patientsAdapter == null) {
-            patientsAdapter = new PatientsAdapter(imagesDir, patients, this);
+            patientsAdapter = new PatientsAdapter(patients, this);
             mainLayoutBinding.patientsList.setAdapter(patientsAdapter);
             mainLayoutBinding.patientsList.setLayoutManager(new LinearLayoutManager(this));
         }

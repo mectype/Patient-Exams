@@ -12,7 +12,15 @@ class PatientsRepository(patientsDatabase: PatientDatabase) {
             patientDao.addPatient(patient)
     }
 
+    suspend fun updatePatient(patient: Patient) {
+        patientDao.updatePatient(patient)
+    }
+
     suspend fun removePatient(patient: Patient) {
         patientDao.removePatient(patient)
+    }
+
+    suspend fun findByName(fullName : String) : Patient {
+        return patientDao.findByName(fullName)
     }
 }

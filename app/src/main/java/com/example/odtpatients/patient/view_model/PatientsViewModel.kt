@@ -28,11 +28,20 @@ class PatientsViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             patientsRepository.addPatient(patient)
         }
-        //patientsLiveData.value.add(patient)
+    }
+
+    fun updatePatient(patient: Patient) {
+        viewModelScope.launch {
+            patientsRepository.updatePatient(patient)
+        }
     }
     fun removePatient(patient: Patient) {
         viewModelScope.launch {
             patientsRepository.removePatient(patient)
         }
+    }
+
+    suspend fun findByName(fullName: String) : Patient {
+        return patientsRepository.findByName(fullName)
     }
 }

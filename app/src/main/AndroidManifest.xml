@@ -15,12 +15,15 @@
         android:theme="@style/Theme.ODTPatients"
         tools:targetApi="31">
         <activity
-            android:name=".EditExamActivity"
+            android:name=".activities.EditExamActivity"
             android:exported="false"
-            android:label="@string/title_activity_edit_exam"
-            android:theme="@style/Theme.ODTPatients.NoActionBar" />
+            android:theme="@style/Theme.ODTPatients" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.EditImageActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ODTPatients" />
+        <activity
+            android:name=".activities.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

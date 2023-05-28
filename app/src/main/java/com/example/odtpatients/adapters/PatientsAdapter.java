@@ -1,4 +1,4 @@
-package com.example.odtpatients;
+package com.example.odtpatients.adapters;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -18,12 +18,11 @@ import java.util.List;
 public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.PatientViewHolder> {
     private int rowIndex = -1;
     private final PatientRowClicked listener;
-    private List<Patient> patientsList;
-    private final File imageDir;
+    private final List<Patient> patientsList;
 
-    public PatientsAdapter(File images_dir, List<Patient> list, PatientRowClicked pListener) {
+
+    public PatientsAdapter(List<Patient> list, PatientRowClicked pListener) {
         patientsList = list;
-        imageDir = images_dir;
         listener = pListener;
     }
 

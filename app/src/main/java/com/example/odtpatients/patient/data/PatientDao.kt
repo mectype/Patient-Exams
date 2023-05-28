@@ -6,6 +6,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface PatientDao {
@@ -13,7 +14,10 @@ interface PatientDao {
     fun getAllPatients(): LiveData<List<Patient>>
 
     @Query("SELECT * FROM Patient WHERE name Like :fullName")
-    fun findByName(fullName: String) : Patient
+    suspend fun findByName(fullName: String) : Patient
+
+    @Update
+    suspend fun updatePatient(patient: Patient)
 
     @Insert
     suspend fun addPatient(patient: Patient)
