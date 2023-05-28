@@ -32,30 +32,21 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LifecycleOwner, PatientRowClicked {
     final static String PATIENT_NAME = "patient_name";
-
-    File avatarsImagesDir;
-    final static String IMAGES_FOLDER = "images";
     private MainLayoutBinding mainLayoutBinding;
     private PatientsViewModel patientsViewModel;
     private PatientsAdapter patientsAdapter;
     private Patient currentPatient; // Indicating patient to do actions for (view/remove/export)
     private int rowIndex = -1;
 
-    public static boolean needToDelete = false;
+    public static boolean needToDelete = false; // small hack, to know when to delete current patient, from edit exam activity.
+                                                // should be replaced by either startActivityForResult for edit exam activity, or
+                                                // observing data more carefully.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainLayoutBinding = MainLayoutBinding.inflate(getLayoutInflater());
         setContentView(mainLayoutBinding.getRoot());
-
-        avatarsImagesDir = new File(getCacheDir(), IMAGES_FOLDER);
-        if (!avatarsImagesDir.exists()) {
-            if (!avatarsImagesDir.mkdir()) {
-                Log.e("MainActivity", "Failed to create folder for images");
-                System.exit(1);
-            }
-        }
 
         patientsViewModel = new ViewModelProvider(this).get(PatientsViewModel.class);
         patientsViewModel.getAllPatients().observe(this, this::updatePatients);
@@ -112,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
         if (assertPatientSelected()) {
             Intent intent = new Intent(MainActivity.this, EditExamActivity.class);
             intent.putExtra(PATIENT_NAME, currentPatient.getName());
-            startActivityForResult(intent,6);
+            startActivity(intent);
         }
     }
 
@@ -154,8 +145,6 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         final EditText edittext = new EditText(this);
         alert.setMessage(R.string.new_patient_name);
-        //alert.setTitle(R.string.add);
-
         alert.setView(edittext);
 
         alert.setPositiveButton(R.string.ok, (dialog, whichButton) -> {
