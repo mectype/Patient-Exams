@@ -9,7 +9,7 @@ class PatientsRepository(patientsDatabase: PatientDatabase) {
 
     fun getAllPatients() = patientsList
     suspend fun addPatient(patient: Patient) {
-            patientDao.addPatient(patient)
+        patientDao.addPatient(patient)
     }
 
     suspend fun updatePatient(patient: Patient) {

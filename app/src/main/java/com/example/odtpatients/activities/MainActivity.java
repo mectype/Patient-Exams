@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
     private PatientsAdapter patientsAdapter;
     private Patient currentPatient; // Indicating patient to do actions for (view/remove/export)
     private int rowIndex = -1;
+
+    public static boolean needToDelete = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
         if (assertPatientSelected()) {
             Intent intent = new Intent(MainActivity.this, EditExamActivity.class);
             intent.putExtra(PATIENT_NAME, currentPatient.getName());
-            startActivity(intent);
+            startActivityForResult(intent,6);
         }
     }
 
@@ -119,17 +122,32 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
         }
     }
 
+    @Override
+    protected void onResume() {
+        if(MainActivity.needToDelete) {
+            MainActivity.needToDelete = false;
+            deletePatient();
+
+        }
+        super.onResume();
+    }
+
     private void showDialogForRemove() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle(R.string.confirm_delete);
         alert.setPositiveButton(R.string.ok, (dialog, whichButton) -> {
-            patientsViewModel.removePatient(currentPatient);
-            patientsAdapter.removePatient(currentPatient);
-            rowIndex = -1;
+            deletePatient();
         });
 
         alert.setNegativeButton(R.string.cancel, (dialog, whichButton) -> {  });
         alert.show();
+    }
+
+    private void deletePatient() {
+        patientsViewModel.removePatient(currentPatient);
+        patientsAdapter.removePatient(currentPatient);
+        rowIndex = -1;
+        currentPatient = null;
     }
 
     private void addNewPatient() {
@@ -147,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
                     Toast.makeText(this,R.string.patient_name_exists, Toast.LENGTH_LONG).show();
                 } else {
                     Patient p = new Patient(patientName);
+                    patientsViewModel.generateNewAvatarIcon(patientsAdapter.getItemCount());    // to get different image each time (still not great, if we delete and re add, but good enough for now
                     patientsAdapter.addPatient(p);
                     patientsViewModel.addPatient(p);
                 }
@@ -161,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
     }
 
     private void updatePatients(List<Patient> patients) {
-        android.util.Log.e("GUYGUY", "updatePatients "+patients.size());
         if (patients.isEmpty()) {
             mainLayoutBinding.tvEmptyList.setVisibility(View.VISIBLE);
             mainLayoutBinding.patientsList.setVisibility(View.GONE);
@@ -174,6 +192,9 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
             mainLayoutBinding.patientsList.setAdapter(patientsAdapter);
             mainLayoutBinding.patientsList.setLayoutManager(new LinearLayoutManager(this));
         }
+        if (patients != patientsAdapter.patientsList) {
+            patientsAdapter.patientsList = patients;
+        }
         patientsAdapter.resetSelectedPatient();
         patientsAdapter.notifyDataSetChanged();
     }
@@ -183,4 +204,5 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner, P
         currentPatient = patient;
         rowIndex = selectedIndex;
     }
+
 }

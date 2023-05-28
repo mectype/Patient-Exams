@@ -15,7 +15,6 @@ class ImagesAdapter(directoryPath : String) : RecyclerView.Adapter<ImagesAdapter
 
     init {
         imagesList = File(directoryPath).listFiles()!!.toMutableList()
-        android.util.Log.e("GUYGUY","imagesList size  ${imagesList.size}")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {

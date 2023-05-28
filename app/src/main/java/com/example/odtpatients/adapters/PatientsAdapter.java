@@ -12,13 +12,12 @@ import com.example.odtpatients.interfaces.PatientRowClicked;
 import com.example.odtpatients.patient.data.Patient;
 import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.List;
 
 public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.PatientViewHolder> {
     private int rowIndex = -1;
     private final PatientRowClicked listener;
-    private final List<Patient> patientsList;
+    public List<Patient> patientsList;
 
 
     public PatientsAdapter(List<Patient> list, PatientRowClicked pListener) {

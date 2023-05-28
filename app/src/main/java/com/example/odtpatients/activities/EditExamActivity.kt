@@ -94,7 +94,7 @@ class EditExamActivity : AppCompatActivity() {
     }
 
     private fun deletePatient() {
-        patientsViewModel.removePatient(patient)
+        MainActivity.needToDelete = true
         finish()
     }
 
